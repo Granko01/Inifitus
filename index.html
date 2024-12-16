@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Catcher</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f9;
+    }
+    .container {
+      max-width: 400px;
+      padding: 20px;
+      background: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 1.5em;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      text-align: left;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Data Catcher</h1>
+    <form id="dataForm">
+      <label for="name">Name</label>
+      <input type="text" id="name" placeholder="Your Name" required />
+
+      <label for="phone">Phone</label>
+      <input type="tel" id="phone" placeholder="Your Phone Number" required />
+
+      <button type="submit">Submit</button>
+    </form>
+    <p id="result" style="color: green; margin-top: 20px;"></p>
+  </div>
+
+  <script>
+    const form = document.getElementById('dataForm');
+    const result = document.getElementById('result');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+
+      if (!name || !phone) {
+        alert('Please complete the form.');
+        return;
+      }
+
+      // Replace with your Google Apps Script URL
+      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzPrccP_8O2no-3NRIcKfN6e9sZ4Xj8h3SRWrndvF5wy0dLYctVfyvQKmDfP5KJL2E/exec';  // Replace with your actual URL
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, phone }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          result.textContent = `Data submitted successfully! Server says: ${data.message}`;
+        })
+        .catch((error) => {
+          console.error('Error submitting data:', error);
+          alert('Failed to submit data. Try again later.');
+        });
+    });
+  </script>
+</body>
+</html>
