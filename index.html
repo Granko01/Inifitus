@@ -84,20 +84,25 @@
       const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzPrccP_8O2no-3NRIcKfN6e9sZ4Xj8h3SRWrndvF5wy0dLYctVfyvQKmDfP5KJL2E/exec';  // Replace with your actual URL
 
       fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, phone }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          result.textContent = `Data submitted successfully! Server says: ${data.message}`;
-        })
-        .catch((error) => {
-          console.error('Error submitting data:', error);
-          alert('Failed to submit data. Try again later.');
-        });
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ name, phone }),
+})
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error(`Server returned error: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then((data) => {
+    result.textContent = `Data submitted successfully! Server says: ${data.message}`;
+  })
+  .catch((error) => {
+    console.error('Error submitting data:', error);
+    alert(`Failed to submit data. Try again later. Error: ${error.message}`);
+  });
     });
   </script>
 </body>
